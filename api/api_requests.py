@@ -7,79 +7,57 @@ from api.endpoints import Endpoints
 class APIRequests:
     BASE_URL = Endpoints.BASE_URL
 
+    @allure.step("Получение списка ингредиентов")
     def get_ingredients(self):
-        endpoint = Endpoints.INGREDIENTS
-        with allure.step(f"GET {self.BASE_URL}{endpoint}"):
-            response = requests.get(f"{self.BASE_URL}{endpoint}")
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        response = requests.get(f"{self.BASE_URL}{Endpoints.INGREDIENTS}")
+        return response
 
+    @allure.step("Создание заказа")
     def create_order(self, ingredients_list, access_token=None):
-        endpoint = Endpoints.ORDERS
-        with allure.step(f"POST {self.BASE_URL}{endpoint}"):
-            headers = {'Authorization': f'Bearer {access_token}'} if access_token else {}
-            payload = {'ingredients': ingredients_list}
-            response = requests.post(f"{self.BASE_URL}{endpoint}", json=payload, headers=headers)
-            allure.attach(json.dumps(payload), name="body", attachment_type=allure.attachment_type.JSON)
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        headers = {'Authorization': f'Bearer {access_token}'} if access_token else {}
+        payload = {'ingredients': ingredients_list}
+        response = requests.post(f"{self.BASE_URL}{Endpoints.ORDERS}", json=payload, headers=headers)
+        return response
 
+    @allure.step("Создание пользователя")
     def create_user(self, email, password, name):
-        endpoint = Endpoints.REGISTER
-        with allure.step(f"POST {self.BASE_URL}{endpoint}"):
-            payload = {'email': email, 'password': password, 'name': name}
-            response = requests.post(f"{self.BASE_URL}{endpoint}", json=payload)
-            allure.attach(json.dumps(payload), name="body", attachment_type=allure.attachment_type.JSON)
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        payload = {'email': email, 'password': password, 'name': name}
+        response = requests.post(f"{self.BASE_URL}{Endpoints.REGISTER}", json=payload)
+        return response
 
+    @allure.step("Авторизация пользователя")
     def login_user(self, email, password):
-        endpoint = Endpoints.LOGIN
-        with allure.step(f"POST {self.BASE_URL}{endpoint}"):
-            payload = {'email': email, 'password': password}
-            response = requests.post(f"{self.BASE_URL}{endpoint}", json=payload)
-            allure.attach(json.dumps(payload), name="body", attachment_type=allure.attachment_type.JSON)
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        payload = {'email': email, 'password': password}
+        response = requests.post(f"{self.BASE_URL}{Endpoints.LOGIN}", json=payload)
+        return response
 
+    @allure.step("Получение данных пользователя")
     def get_user_data(self, access_token):
-        endpoint = Endpoints.USER
-        with allure.step(f"GET {self.BASE_URL}{endpoint}"):
-            headers = {'Authorization': f'Bearer {access_token}'}
-            response = requests.get(f"{self.BASE_URL}{endpoint}", headers=headers)
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        headers = {'Authorization': f'Bearer {access_token}'}
+        response = requests.get(f"{self.BASE_URL}{Endpoints.USER}", headers=headers)
+        return response
 
+    @allure.step("Обновление данных пользователя")
     def update_user_data(self, access_token, email, name):
-        endpoint = Endpoints.USER
-        with allure.step(f"PATCH {self.BASE_URL}{endpoint}"):
-            headers = {'Authorization': f'Bearer {access_token}'}
-            payload = {'email': email, 'name': name}
-            response = requests.patch(f"{self.BASE_URL}{endpoint}", json=payload, headers=headers)
-            allure.attach(json.dumps(payload), name="body", attachment_type=allure.attachment_type.JSON)
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        headers = {'Authorization': f'Bearer {access_token}'}
+        payload = {'email': email, 'name': name}
+        response = requests.patch(f"{self.BASE_URL}{Endpoints.USER}", json=payload, headers=headers)
+        return response
 
+    @allure.step("Удаление пользователя")
     def delete_user(self, access_token):
-        endpoint = Endpoints.USER
-        with allure.step(f"DELETE {self.BASE_URL}{endpoint}"):
-            headers = {'Authorization': f'Bearer {access_token}'}
-            response = requests.delete(f"{self.BASE_URL}{endpoint}", headers=headers)
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        headers = {'Authorization': f'Bearer {access_token}'}
+        response = requests.delete(f"{self.BASE_URL}{Endpoints.USER}", headers=headers)
+        return response
 
+    @allure.step("Получение заказов")
     def get_all_orders(self, access_token):
-        endpoint = Endpoints.ALL_ORDERS
-        with allure.step(f"GET {self.BASE_URL}{endpoint}"):
-            headers = {'Authorization': f'Bearer {access_token}'}
-            response = requests.get(f"{self.BASE_URL}{endpoint}", headers=headers)
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        headers = {'Authorization': f'Bearer {access_token}'}
+        response = requests.get(f"{self.BASE_URL}{Endpoints.ALL_ORDERS}", headers=headers)
+        return response
 
+    @allure.step("Получение заказов пользователя")
     def get_user_orders(self, access_token=None):
-        endpoint = Endpoints.USER_ORDERS
-        with allure.step(f"GET {self.BASE_URL}{endpoint}"):
-            headers = {'Authorization': f'Bearer {access_token}'} if access_token else {}
-            response = requests.get(f"{self.BASE_URL}{endpoint}", headers=headers)
-            allure.attach(response.text, name="response", attachment_type=allure.attachment_type.JSON)
-            return response
+        headers = {'Authorization': f'Bearer {access_token}'} if access_token else {}
+        response = requests.get(f"{self.BASE_URL}{Endpoints.USER_ORDERS}", headers=headers)
+        return response

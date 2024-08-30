@@ -1,6 +1,6 @@
 import allure
 from api.api_requests import APIRequests
-from utils.data_generator import get_user_data
+from utils.data_generator import generate_user_data
 from utils.expected_data import EXP_DATA
 
 
@@ -10,7 +10,8 @@ class TestUserUpdate:
 
     @allure.title('Обновление данных авторизованного пользователя')
     def test_update_user_with_authorization(self, authorized_token):
-        updated_data = get_user_data()
+        updated_data = generate_user_data()
+
         response = self.api_client.update_user_data(
             access_token=authorized_token,
             email=updated_data['email'],
@@ -23,7 +24,8 @@ class TestUserUpdate:
 
     @allure.title('Обновление данных неавторизованного пользователя')
     def test_update_user_without_authorization(self):
-        updated_data = get_user_data()
+        updated_data = generate_user_data()
+
         response = self.api_client.update_user_data(
             access_token="",
             email=updated_data['email'],

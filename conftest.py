@@ -1,20 +1,13 @@
 import pytest
 from api.api_requests import APIRequests
-from utils.data_generator import get_user_data
+from utils.data_generator import generate_user_data
 
 
 @pytest.fixture
-def api_client():
-    return APIRequests()
+def create_test_user():
+    api_client = APIRequests()
+    user_data = generate_user_data()
 
-
-@pytest.fixture
-def user_data():
-    return get_user_data()
-
-
-@pytest.fixture
-def create_test_user(api_client, user_data):
     response = api_client.create_user(
         email=user_data['email'],
         password=user_data['password'],
@@ -28,7 +21,9 @@ def create_test_user(api_client, user_data):
 
 
 @pytest.fixture
-def authorized_token(api_client, create_test_user):
+def authorized_token(create_test_user):
+    api_client = APIRequests()
+
     user_data = create_test_user
     auth_response = api_client.login_user(
         email=user_data["email"],
@@ -39,6 +34,8 @@ def authorized_token(api_client, create_test_user):
 
 
 @pytest.fixture
-def ingredients(api_client):
+def ingredients():
+    api_client = APIRequests()
+
     response = api_client.get_ingredients()
     return [ingredient["_id"] for ingredient in response.json()["data"]]

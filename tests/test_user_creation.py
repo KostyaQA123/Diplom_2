@@ -1,6 +1,7 @@
 import pytest
 import allure
 from api.api_requests import APIRequests
+from utils.data_generator import generate_user_data
 from utils.expected_data import EXP_DATA
 
 
@@ -9,7 +10,9 @@ class TestUserCreation:
     api_client = APIRequests()
 
     @allure.title('Создание уникального пользователя')
-    def test_create_unique_user(self, user_data):
+    def test_create_unique_user(self):
+        user_data = generate_user_data()
+
         response = self.api_client.create_user(
             email=user_data['email'],
             password=user_data['password'],
@@ -20,7 +23,9 @@ class TestUserCreation:
         assert 'accessToken' in response.json()
 
     @allure.title('Создание существующего пользователя')
-    def test_create_existing_user(self, user_data):
+    def test_create_existing_user(self):
+        user_data = generate_user_data()
+
         response = self.api_client.create_user(
             email=user_data['email'],
             password=user_data['password'],
@@ -39,7 +44,9 @@ class TestUserCreation:
 
     @allure.title('Создание пользователя без обязательных параметров')
     @pytest.mark.parametrize("field", ["email", "password", "name"])
-    def test_create_user_with_missing_field(self, user_data, field):
+    def test_create_user_with_missing_field(self, field):
+        user_data = generate_user_data()
+
         incomplete_user_data = user_data.copy()
         incomplete_user_data.pop(field, None)
 

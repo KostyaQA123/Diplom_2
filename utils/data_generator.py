@@ -17,7 +17,7 @@ def generate_random_password(length=8):
     return ''.join(random.choice(characters) for i in range(length))
 
 
-def get_user_data():
+def generate_user_data():
     return {
         'email': generate_random_email(),
         'password': generate_random_password(),
